@@ -15,9 +15,14 @@ from app.vectorstore.faiss_store import FAISSStore
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup and shutdown events."""
+    print("🚀 KnowFlux Backend starting up...")
+    print("🔗 Connecting to MongoDB...")
     await connect_db()
+    print("📂 Loading FAISS Index...")
     FAISSStore.load_index()
+    print("✨ Startup sequence complete. API ready.")
     yield
+    print("🛑 Backend shutting down...")
     await close_db()
 
 
@@ -29,7 +34,7 @@ app = FastAPI(
 )
 
 # CORS
-origins = os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
+origins = os.getenv("CORS_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
