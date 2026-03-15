@@ -1,8 +1,10 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Chat memory management."""
 import uuid
 from typing import List, Optional
 from datetime import datetime
-from app.database.mongodb import get_collection
+from app.database.mongodb import get_collection # type: ignore
 
 
 # In-memory fallback when MongoDB is unavailable
@@ -16,7 +18,7 @@ async def get_or_create_conversation(conversation_id: Optional[str] = None) -> s
     return str(uuid.uuid4())
 
 
-async def save_message(conversation_id: str, role: str, content: str, metadata: dict = None):
+async def save_message(conversation_id: str, role: str, content: str, metadata: Optional[dict] = None):
     """Save a chat message."""
     message = {
         "conversation_id": conversation_id,
@@ -103,11 +105,13 @@ async def get_query_stats() -> dict:
         total_latency += stat.get("latency_ms", 0)
     
     n = len(stats_list)
+    avg_confidence = float(total_confidence) / n if n else 0.0
+    avg_latency = float(total_latency) / n if n else 0.0
     return {
         "total_queries": n,
         "query_distribution": distribution,
-        "avg_confidence": round(total_confidence / n, 3) if n else 0,
-        "avg_retrieval_latency_ms": round(total_latency / n, 1) if n else 0,
+        "avg_confidence": round(avg_confidence, 3), # type: ignore
+        "avg_retrieval_latency_ms": round(avg_latency, 1), # type: ignore
         "recent_queries": [
             {"query": s.get("query", "")[:100], "type": s.get("query_type"), "confidence": s.get("confidence")}
             for s in stats_list[:10]

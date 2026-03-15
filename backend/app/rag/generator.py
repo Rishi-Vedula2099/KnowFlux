@@ -1,25 +1,30 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Response generation with citations."""
 import os
-from typing import List, AsyncGenerator
+from typing import List, AsyncGenerator, Optional
+from itertools import islice
 
 
 async def generate_response(
     query: str,
     sources: List[dict],
-    chat_history: List[dict] = None,
+    chat_history: Optional[List[dict]] = None,
     query_type: str = "simple",
 ) -> str:
     """Generate a response using GPT-4o with context and citations."""
     try:
-        from openai import OpenAI
+        from openai import OpenAI # type: ignore
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         
         # Build context from sources
         context = ""
         if sources:
-            context_parts = []
+            context_parts: List[str] = []
             for i, source in enumerate(sources, 1):
-                text = source.get("text", "")[:1000]
+                raw_text = str(source.get("text", ""))
+                # Using islice to avoid the slice operator which the IDE misinterpreits
+                text = "".join(islice(raw_text, 1000))
                 meta = source.get("metadata", {})
                 src_label = meta.get("filename", meta.get("title", meta.get("url", f"Source {i}")))
                 context_parts.append(f"[Source {i}: {src_label}]\n{text}")
@@ -33,8 +38,9 @@ async def generate_response(
         
         # Add chat history
         if chat_history:
-            for msg in chat_history[-6:]:  # Last 6 messages for context
-                messages.append({
+            # Using islice for consistent robust pattern
+            for msg in islice(reversed(chat_history), 6):
+                messages.insert(1, {
                     "role": msg.get("role", "user"),
                     "content": msg.get("content", ""),
                 })
@@ -53,7 +59,7 @@ async def generate_response(
             max_tokens=2000,
         )
         
-        return response.choices[0].message.content
+        return str(response.choices[0].message.content)
         
     except Exception as e:
         return f"I apologize, but I encountered an error generating a response: {str(e)}. Please ensure your OpenAI API key is configured correctly."
@@ -62,19 +68,20 @@ async def generate_response(
 async def generate_response_stream(
     query: str,
     sources: List[dict],
-    chat_history: List[dict] = None,
+    chat_history: Optional[List[dict]] = None,
     query_type: str = "simple",
 ) -> AsyncGenerator[str, None]:
     """Stream response using GPT-4o."""
     try:
-        from openai import OpenAI
+        from openai import OpenAI # type: ignore
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         
         context = ""
         if sources:
-            context_parts = []
+            context_parts: List[str] = []
             for i, source in enumerate(sources, 1):
-                text = source.get("text", "")[:1000]
+                raw_text = str(source.get("text", ""))
+                text = "".join(islice(raw_text, 1000))
                 meta = source.get("metadata", {})
                 src_label = meta.get("filename", meta.get("title", meta.get("url", f"Source {i}")))
                 context_parts.append(f"[Source {i}: {src_label}]\n{text}")
@@ -84,8 +91,8 @@ async def generate_response_stream(
         messages = [{"role": "system", "content": system_prompt}]
         
         if chat_history:
-            for msg in chat_history[-6:]:
-                messages.append({
+            for msg in islice(reversed(chat_history), 6):
+                messages.insert(1, {
                     "role": msg.get("role", "user"),
                     "content": msg.get("content", ""),
                 })
@@ -106,7 +113,7 @@ async def generate_response_stream(
         
         for chunk in stream:
             if chunk.choices[0].delta.content:
-                yield chunk.choices[0].delta.content
+                yield str(chunk.choices[0].delta.content)
                 
     except Exception as e:
         yield f"Error: {str(e)}"

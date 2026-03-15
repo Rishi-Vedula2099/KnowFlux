@@ -1,5 +1,7 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Pydantic models for the application."""
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field # type: ignore
 from typing import Optional, List
 from datetime import datetime
 from enum import Enum

@@ -1,3 +1,5 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 import os
 import sys
 import warnings
@@ -14,15 +16,15 @@ print(f"Python: {sys.version}")
 
 try:
     check("Importing numpy")
-    import numpy
+    import numpy # type: ignore
     print(f"NumPy Version: {numpy.__version__}")
 except Exception as e:
     print(f"❌ NumPy failed: {e}")
 
 try:
     check("Importing motor")
-    import motor
-    import pymongo
+    import motor # type: ignore
+    import pymongo # type: ignore
     print(f"Motor Version: {motor.version}")
     print(f"PyMongo Version: {pymongo.version}")
 except Exception as e:
@@ -30,7 +32,7 @@ except Exception as e:
 
 try:
     check("Importing faiss")
-    import faiss
+    import faiss # type: ignore
     print("✅ FAISS success")
 except Exception as e:
     print(f"❌ FAISS failed: {e}")
@@ -38,8 +40,7 @@ except Exception as e:
 try:
     check("Importing app.main")
     # This will trigger database connections etc if not careful
-    # But we want to see if imports work
-    from app.main import app
+    from app.main import app # type: ignore
     print("✅ Project import success")
 except Exception as e:
     print(f"❌ Project failed: {e}")

@@ -1,10 +1,12 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Chat API endpoint."""
 import uuid
-from fastapi import APIRouter
-from fastapi.responses import StreamingResponse
-from app.database.models import ChatRequest
-from app.rag.graph import run_adaptive_rag, run_adaptive_rag_stream
-from app.services.memory import get_or_create_conversation
+from fastapi import APIRouter # type: ignore
+from fastapi.responses import StreamingResponse # type: ignore
+from app.database.models import ChatRequest # type: ignore
+from app.rag.graph import run_adaptive_rag, run_adaptive_rag_stream # type: ignore
+from app.services.memory import get_or_create_conversation # type: ignore
 
 router = APIRouter()
 

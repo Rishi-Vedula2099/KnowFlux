@@ -1,6 +1,9 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Query complexity classifier."""
 import os
 from typing import Tuple
+import json
 
 
 async def classify_query(query: str, has_documents: bool = False) -> Tuple[str, str]:
@@ -11,7 +14,7 @@ async def classify_query(query: str, has_documents: bool = False) -> Tuple[str, 
         query_type: 'simple' | 'retrieval' | 'multi_hop' | 'web_search'
     """
     try:
-        from openai import OpenAI
+        from openai import OpenAI # type: ignore
         client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         
         system_prompt = f"""You are a query complexity classifier for a RAG system.

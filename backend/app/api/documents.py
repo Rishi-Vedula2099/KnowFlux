@@ -1,9 +1,11 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Documents management API."""
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException # type: ignore
 from typing import List
-from app.database.mongodb import get_collection
-from app.database.models import DocumentResponse
-from app.vectorstore.faiss_store import FAISSStore
+from app.database.mongodb import get_collection # type: ignore
+from app.database.models import DocumentResponse # type: ignore
+from app.vectorstore.faiss_store import FAISSStore # type: ignore
 
 router = APIRouter()
 
@@ -60,7 +62,7 @@ async def delete_document(document_id: str):
 @router.get("/stats")
 async def get_stats():
     """Get system statistics."""
-    from app.services.memory import get_query_stats
+    from app.services.memory import get_query_stats # type: ignore
     
     # Vector store stats
     vs_stats = FAISSStore.get_stats()

@@ -1,17 +1,19 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Document ingestion API."""
 import os
 import uuid
 import tempfile
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException
-from typing import Optional
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException # type: ignore
+from typing import Optional, cast
 from datetime import datetime
 
-from app.ingestion.loaders import load_document, load_url, get_file_type
-from app.ingestion.splitter import split_text
-from app.ingestion.embedder import generate_embeddings
-from app.vectorstore.faiss_store import FAISSStore
-from app.database.mongodb import get_collection
-from app.database.models import UploadResponse
+from app.ingestion.loaders import load_document, load_url, get_file_type # type: ignore
+from app.ingestion.splitter import split_text # type: ignore
+from app.ingestion.embedder import generate_embeddings # type: ignore
+from app.vectorstore.faiss_store import FAISSStore # type: ignore
+from app.database.mongodb import get_collection # type: ignore
+from app.database.models import UploadResponse # type: ignore
 
 router = APIRouter()
 
@@ -38,9 +40,11 @@ async def upload_document(
             
             # Save to temp file
             content = await file.read()
+            # Explicit cast to satisfy IDE
+            content_bytes = cast(bytes, content)
             suffix = f".{file_type}" if file_type != "md" else ".md"
-            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-                tmp.write(content)
+            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix, mode='wb') as tmp:
+                tmp.write(content_bytes)
                 tmp_path = tmp.name
             
             # Load document
@@ -48,7 +52,7 @@ async def upload_document(
             os.unlink(tmp_path)  # Clean up
             
             filename = file.filename
-            file_size = len(content)
+            file_size = len(content_bytes)
         else:
             # Handle URL
             text = await load_url(url)

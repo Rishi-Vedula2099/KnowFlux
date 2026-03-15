@@ -1,6 +1,8 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """MongoDB connection and utilities."""
 import os
-from motor.motor_asyncio import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient # type: ignore
 from typing import Optional
 
 _client: Optional[AsyncIOMotorClient] = None

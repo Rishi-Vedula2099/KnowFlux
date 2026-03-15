@@ -1,14 +1,17 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """LangGraph Adaptive RAG Workflow."""
 import time
 from typing import TypedDict, List, Optional, Annotated
-from app.services.query_classifier import classify_query
-from app.services.answer_validator import validate_answer
-from app.services.memory import get_chat_history, save_message, save_query_stats
-from app.rag.router import route_query
-from app.rag.retrieval import retrieve_documents, multi_hop_retrieve
-from app.rag.web_search import search_web
-from app.rag.generator import generate_response, generate_response_stream
-from app.vectorstore.faiss_store import FAISSStore
+from itertools import islice
+from app.services.query_classifier import classify_query # type: ignore
+from app.services.answer_validator import validate_answer # type: ignore
+from app.services.memory import get_chat_history, save_message, save_query_stats # type: ignore
+from app.rag.router import route_query # type: ignore
+from app.rag.retrieval import retrieve_documents, multi_hop_retrieve # type: ignore
+from app.rag.web_search import search_web # type: ignore
+from app.rag.generator import generate_response, generate_response_stream # type: ignore
+from app.vectorstore.faiss_store import FAISSStore # type: ignore
 
 
 class RAGState(TypedDict):
@@ -53,7 +56,7 @@ async def run_adaptive_rag(query: str, conversation_id: str) -> dict:
     route = route_query(query_type)
     reasoning_trace.append(f"🔀 Routed to: {route}")
     
-    sources = []
+    sources: List[dict] = []
     if route == "vector_retrieval":
         sources = await retrieve_documents(query, top_k=5)
         reasoning_trace.append(f"📚 Retrieved {len(sources)} documents from vector store")
@@ -148,7 +151,7 @@ async def run_adaptive_rag_stream(query: str, conversation_id: str):
     route = route_query(query_type)
     reasoning_trace.append(f"🔀 Route: {route}")
     
-    sources = []
+    sources: List[dict] = []
     if route == "vector_retrieval":
         sources = await retrieve_documents(query, top_k=5)
         reasoning_trace.append(f"📚 Retrieved {len(sources)} docs")

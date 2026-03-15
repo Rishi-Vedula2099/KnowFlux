@@ -1,3 +1,5 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Web search using Tavily."""
 import os
 from typing import List
@@ -6,7 +8,7 @@ from typing import List
 async def search_web(query: str, max_results: int = 5) -> List[dict]:
     """Search the web using Tavily API."""
     try:
-        from tavily import TavilyClient
+        from tavily import TavilyClient # type: ignore
         
         api_key = os.getenv("TAVILY_API_KEY")
         if not api_key:

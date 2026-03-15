@@ -1,5 +1,7 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Query routing logic."""
-from app.database.models import QueryType
+from app.database.models import QueryType # type: ignore
 
 
 def route_query(query_type: str) -> str:

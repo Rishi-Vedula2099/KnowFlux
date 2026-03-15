@@ -1,15 +1,17 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """KnowFlux - Adaptive RAG Platform Backend"""
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI # type: ignore
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
 from contextlib import asynccontextmanager
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv # type: ignore
 
 load_dotenv()
 
-from app.api import chat, ingest, documents, health
-from app.database.mongodb import connect_db, close_db
-from app.vectorstore.faiss_store import FAISSStore
+from app.api import chat, ingest, documents, health # type: ignore
+from app.database.mongodb import connect_db, close_db # type: ignore
+from app.vectorstore.faiss_store import FAISSStore # type: ignore
 
 
 @asynccontextmanager

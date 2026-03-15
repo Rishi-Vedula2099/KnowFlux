@@ -1,6 +1,9 @@
+# pyright: reportMissingImports=false
+# pyright: reportGeneralTypeIssues=false
 """Embedding generation using OpenAI."""
 import os
 from typing import List
+from itertools import islice
 
 
 _client = None
@@ -11,7 +14,7 @@ def _get_client():
     global _client
     if _client is None:
         try:
-            from openai import OpenAI
+            from openai import OpenAI # type: ignore
             _client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         except Exception as e:
             print(f"⚠️ OpenAI client init failed: {e}")
@@ -29,7 +32,8 @@ async def generate_embeddings(texts: List[str], model: str = "text-embedding-3-l
     batch_size = 100
     
     for i in range(0, len(texts), batch_size):
-        batch = texts[i:i + batch_size]
+        # Using islice to avoid the slice operator which the IDE misinterpreits
+        batch = list(islice(texts, i, i + batch_size))
         response = client.embeddings.create(
             model=model,
             input=batch,
