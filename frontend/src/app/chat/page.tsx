@@ -2,36 +2,36 @@
 
 import { ChatWindow } from "@/components/chat/chat-window";
 import { InputBox } from "@/components/chat/input-box";
-import { BrainCircuit, Info } from "lucide-react";
+import LuxeToggle from "@/components/ui/LuxeToggle";
 
 export default function ChatPage() {
   return (
-    <div className="flex flex-col h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/5 via-background to-background">
+    <div className="ol-chat flex flex-col h-full gap-4 min-w-0 p-4 relative">
       {/* Header */}
-      <div className="h-14 border-b border-border/40 bg-background/50 backdrop-blur-xl flex items-center justify-between px-6 shrink-0 z-10">
-        <div className="flex items-center gap-3">
-          <div className="bg-primary/10 p-1.5 rounded-md">
-            <BrainCircuit className="w-5 h-5 text-primary" />
-          </div>
-          <div>
-            <h1 className="text-sm font-semibold tracking-wide">Adaptive Engine</h1>
-            <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-              GPT-4o <span className="w-1 h-1 rounded-full bg-green-500 inline-block" /> FAISS <span className="w-1 h-1 rounded-full bg-green-500 inline-block" /> Tavily Search
-            </p>
-          </div>
+      <div className="ol-chat-header flex items-center gap-3 shrink-0">
+        <span className="ol-chat-title font-[var(--serif)] italic font-light text-2xl tracking-wide text-[var(--gold-l)]">
+          The Oracle
+        </span>
+        <span className="ol-chat-badge text-[0.65rem] p-[0.18rem_0.7rem] border border-[var(--edge3)] text-[var(--gold)] bg-[var(--gold-f)] font-[var(--mono)] tracking-[0.07em]">
+          Adaptive RAG · Active
+        </span>
+        <div className="ol-hd-right ml-auto flex items-center gap-[0.75rem]">
+          <LuxeToggle label="Stream" defaultOn />
         </div>
-        <button className="text-muted-foreground hover:text-foreground transition-colors p-2" title="System Info">
-          <Info className="w-4 h-4" />
-        </button>
+      </div>
+
+      {/* Ornamental separator */}
+      <div className="ol-ornament flex items-center gap-2 shrink-0">
+        <div className="ol-orn-line flex-1 h-[1px] bg-[linear-gradient(to_right,transparent,var(--edge2))]" />
+        <div className="ol-orn-diamond w-[5px] h-[5px] bg-[var(--gold)] rotate-45 shrink-0 shadow-[0_0_4px_rgba(212,168,67,0.5)]" />
+        <div className="ol-orn-line-rev flex-1 h-[1px] bg-[linear-gradient(to_left,transparent,var(--edge2))]" />
       </div>
 
       {/* Main Chat Area */}
       <ChatWindow />
 
       {/* Input Area */}
-      <div className="shrink-0 z-10">
-        <InputBox />
-      </div>
+      <InputBox />
     </div>
   );
 }

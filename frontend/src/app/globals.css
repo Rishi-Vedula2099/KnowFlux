@@ -1,84 +1,145 @@
-/* Tailwind CSS directives - processed during build */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Josefin+Sans:wght@200;300;400;500;600&family=Share+Tech+Mono&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 224 71% 4%;
-    --foreground: 213 31% 91%;
-    --card: 224 71% 4%;
-    --card-foreground: 213 31% 91%;
-    --popover: 224 71% 4%;
-    --popover-foreground: 215 20.2% 65.1%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 1.2%;
-    --secondary: 222.2 47.4% 11.2%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 223 47% 11%;
-    --muted-foreground: 215.4 16.3% 56.9%;
-    --accent: 216 34% 17%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 216 34% 17%;
-    --input: 216 34% 17%;
-    --ring: 216 34% 17%;
-    --radius: 0.75rem;
+    /* Obsidian Luxe Design Tokens */
+    --background: 240 10% 3.9%;
+    --foreground: 45 40% 95%;
+    
+    --bg: #0c0c0e;
+    --bg2: #0e0e11;
+    --surface: #131118;
+    --surface2: #1a1820;
+    
+    --edge: rgba(212, 168, 67, 0.12);
+    --edge2: rgba(212, 168, 67, 0.22);
+    --edge3: rgba(212, 168, 67, 0.40);
+    
+    --gold: #d4a843;
+    --gold-l: #f0d090;
+    --gold-d: #9a7830;
+    --gold-f: rgba(212, 168, 67, 0.06);
+    --gold-f2: rgba(212, 168, 67, 0.11);
+    
+    --crimson: #c0392b;
+    
+    --t1: #f0e8d0;
+    --t2: #c8a860;
+    --t3: #6a5030;
+    --t4: #3a2a10;
+    
+    --ui: 'Josefin Sans', sans-serif;
+    --serif: 'Cormorant Garamond', serif;
+    --mono: 'Share Tech Mono', monospace;
 
-    /* Custom AI Glow effects */
-    --ai-glow: 263 70% 50%;
-    --ai-glow-secondary: 200 80% 50%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 45 40% 95%;
   }
 
   * {
-    border-color: hsl(var(--border));
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
   }
 
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    background-image: radial-gradient(ellipse at top, #0f172a, #020617, #020617);
+    background-color: var(--bg);
+    color: var(--t1);
+    font-family: var(--ui);
     min-height: 100vh;
-    font-family: var(--font-sans, "Inter", sans-serif);
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Scrollbar customization */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--gold-d); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 }
 
 @layer utilities {
-  .glass-panel {
-    background-color: hsl(var(--background) / 0.4);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  .ol-glass {
+    background: rgba(10, 10, 12, 0.88);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--edge2);
+    position: relative;
+  }
+  
+  .ol-glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-d), transparent);
+    opacity: 0.35;
   }
 
-  .text-glow {
-    text-shadow: 0 0 20px hsl(var(--primary) / 0.5);
+  .ol-ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .ol-orn-line { flex: 1; height: 1px; background: linear-gradient(to right, transparent, var(--edge2)); }
+  .ol-orn-line-rev { flex: 1; height: 1px; background: linear-gradient(to left, transparent, var(--edge2)); }
+  .ol-orn-diamond {
+    width: 5px; height: 5px; background: var(--gold);
+    transform: rotate(45deg); flex-shrink: 0;
+    box-shadow: 0 0 4px rgba(212,168,67,0.5);
   }
 
-  .animate-pulse-slow {
-    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  /* Animations from Luxe theme */
+  @keyframes ol-ember-pulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes ol-vein {
+    0%, 100% { opacity: 0.28; }
+    50% { opacity: 0.65; }
+  }
+
+  @keyframes ol-glow {
+    0%, 100% { box-shadow: 0 0 14px rgba(212, 168, 67, 0.2), 0 4px 12px rgba(0, 0, 0, 0.5); }
+    50% { box-shadow: 0 0 24px rgba(212, 168, 67, 0.38), 0 4px 14px rgba(0, 0, 0, 0.6); }
+  }
+
+  @keyframes ol-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+
+  @keyframes ol-rip {
+    to { transform: scale(5); opacity: 0; }
+  }
+
+  @keyframes ol-fr-cw { to { transform: rotate(360deg); } }
+  @keyframes ol-fr-ccw { to { transform: rotate(-360deg); } }
+  
+  @keyframes ol-flux-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes ol-fade-up {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes ol-pdot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
   }
 }
